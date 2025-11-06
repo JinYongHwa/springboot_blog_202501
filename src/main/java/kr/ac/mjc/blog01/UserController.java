@@ -1,5 +1,6 @@
 package kr.ac.mjc.blog01;
 
+import jakarta.servlet.http.HttpSession;
 import kr.ac.mjc.blog01.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +19,15 @@ public class UserController {
         UserResponseDto response=new UserResponseDto();
         //회원가입 로직
         response=userService.join(user);
-
         return ResponseEntity.ok(response);
+
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody User user){
+    public ResponseEntity<UserResponseDto> login(@RequestBody User user, HttpSession session){
         UserResponseDto response= userService.login(user);
         //TODO : 로그인 정보 저장하기(세션)
-
+        session.setAttribute("loginUser",response.getUser());
         return ResponseEntity.ok(response);
     }
 }

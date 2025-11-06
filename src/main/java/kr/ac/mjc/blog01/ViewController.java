@@ -1,5 +1,6 @@
 package kr.ac.mjc.blog01;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,14 @@ public class ViewController {
     ArticleService articleService;
 
     @GetMapping("/")
-    public ModelAndView main(){
+    public ModelAndView main(HttpSession session){
         List<Article> articleList=articleService.getArticleList();
         ModelAndView mav=new ModelAndView();
+        User user= (User) session.getAttribute("loginUser");
+        System.out.println(user.getEmail());
+        if(user!=null){
+            mav.addObject("loginUser",user);
+        }
         mav.addObject("articleList",articleList);
         mav.setViewName("main");
         return mav;

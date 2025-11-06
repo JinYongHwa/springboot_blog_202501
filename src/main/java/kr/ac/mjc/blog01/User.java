@@ -8,11 +8,14 @@ import jakarta.persistence.Id;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+
+
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column(name="email")
