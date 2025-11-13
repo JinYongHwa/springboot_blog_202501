@@ -1,5 +1,6 @@
 package kr.ac.mjc.blog01;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,10 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping("/article")
-    public ResponseEntity<Response> saveArticle(@RequestBody Article article){
+    public ResponseEntity<Response> saveArticle(@RequestBody Article article, HttpSession session){
         Response response=new Response();
-        Article savedArticle=articleService.saveArticle(article);
+        User user= (User) session.getAttribute("loginUser");
+        Article savedArticle=articleService.saveArticle(article,user);
         response.setSuccess(true);
         response.setArticle(article);
         response.setMessage("글 작성이 완료되었습니다");

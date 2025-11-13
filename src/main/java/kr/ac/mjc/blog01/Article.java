@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -27,6 +28,19 @@ public class Article {
     @CreatedDate
     @Column(name="writeDate")
     private LocalDateTime writeDate;    //작성일
+
+    @ManyToOne
+    private User writer;           //글 작성자
+
+    @ManyToMany
+    @JoinTable(
+            name="article_category",
+            joinColumns = @JoinColumn(name="article_id"),
+            inverseJoinColumns = @JoinColumn(name="category_id")
+    )
+    private List<Category> categoryList;
+
+    private List<Integer> categoryIds;
 
     public int getNo() {
         return no;
@@ -64,5 +78,30 @@ public class Article {
 
     public void setWriteDate(LocalDateTime writeDate) {
         this.writeDate = writeDate;
+    }
+
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public List<Integer> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<Integer> categoryIds) {
+        this.categoryIds = categoryIds;
     }
 }

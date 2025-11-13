@@ -16,4 +16,6 @@ public interface ArticleRepository extends JpaRepository<Article,Integer> {
 
    List<Article> findAll();
 
+   List<Article> findAllByOrderByWriteDateDesc();
+
 }

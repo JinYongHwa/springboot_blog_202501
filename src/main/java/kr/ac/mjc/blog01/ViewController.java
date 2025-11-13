@@ -15,12 +15,15 @@ public class ViewController {
     @Autowired
     ArticleService articleService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @GetMapping("/")
     public ModelAndView main(HttpSession session){
         List<Article> articleList=articleService.getArticleList();
         ModelAndView mav=new ModelAndView();
         User user= (User) session.getAttribute("loginUser");
-        System.out.println(user.getEmail());
+
         if(user!=null){
             mav.addObject("loginUser",user);
         }
@@ -31,8 +34,12 @@ public class ViewController {
 
 
     @GetMapping("/view/article/write")
-    public String write(){
-        return "write";
+    public ModelAndView write(){
+        ModelAndView mav=new ModelAndView();
+        mav.setViewName("write");
+        List<Category> categoryList=categoryService.getCategoryList();
+        mav.addObject("categoryList",categoryList);
+        return mav;
     }
 
     @GetMapping("/view/article/{no}")
@@ -51,8 +58,9 @@ public class ViewController {
     }
 
     @PostMapping("/article/write/proc")
-    public ModelAndView writeArticle(@ModelAttribute Article article){
-        Article savedArticle=articleService.saveArticle(article);
+    public ModelAndView writeArticle(@ModelAttribute Article article,HttpSession session){
+        User user= (User) session.getAttribute("loginUser");
+        Article savedArticle=articleService.saveArticle(article,user);
         ModelAndView mav=new ModelAndView();
         mav.setViewName("redirect:/view/article/"+savedArticle.getNo());
         return mav;

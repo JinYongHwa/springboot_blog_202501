@@ -22,6 +22,13 @@
         .text-right{
             text-align:right;
         }
+        .category{
+            display:inline-block;
+            background:#ff000055;
+            color:#ff0000;
+            padding :8px 16px;
+            border-radius:8px;
+        }
     </style>
 </head>
 <body>
@@ -30,8 +37,9 @@
             <span th:if="${loginUser!=null}">
                 <span th:text="${loginUser.email}"></span>
             </span>
-            <a href="/view/user/logout" class="btn">로그아웃</a>
-            <a href="/view/article/write" class="btn btn-primary">글쓰기</a>
+            <a th:if="${loginUser!=null}" href="/view/user/logout" class="btn">로그아웃</a>
+            <a th:if="${loginUser!=null}" href="/view/article/write" class="btn btn-primary">글쓰기</a>
+            <a th:if="${loginUser==null}" href="/login" class="btn btn-primary">로그인</a>
         </div>
         <div class="article" th:each="article : ${articleList}">
             <a th:href="@{/view/article/{no} (no=${article.no}) }">
@@ -42,6 +50,10 @@
 
             <div class="write-date" th:text="${article.formattedWriteDate}">
             </div>
+            <div class="writer-name" th:if="${article.writer}" th:text="${article.writer.name}"></div>
+
+            <div class="category" th:each="category : ${article.categoryList}"
+                 th:text="${category.name}"></div>
         </div>
     </div>
 </body>
